@@ -227,3 +227,86 @@ Before finalizing my label taxonomy, I reviewed approximately 30–40 NBA discus
 The biggest challenge will be maintaining consistent boundaries between labels. Online NBA comments often mix emotion, claims, and reasoning in the same post. I will label based on the primary function of the comment rather than individual words.
 
 Another challenge is class balance. Reaction comments are easy to find, but too many of them could make the model overconfident on short emotional text. I will deliberately collect enough analysis and hot take examples so the dataset remains balanced.
+
+---
+## Evaluation Metrics
+
+I will evaluate both the fine-tuned DistilBERT model and the Groq zero-shot baseline using multiple metrics.
+
+### Accuracy
+
+Accuracy measures the percentage of comments that are classified correctly overall. This provides a simple high-level measure of performance.
+
+### Precision
+
+Precision measures how often a predicted label is correct. This is important because I want the classifier to avoid incorrectly labeling emotional reactions as analysis.
+
+### Recall
+
+Recall measures how many examples from each true class are successfully identified. This is important because I want the model to find analysis comments rather than missing them.
+
+### F1 Score
+
+F1 balances precision and recall. Because some labels may appear more frequently than others, F1 provides a better measure than accuracy alone.
+
+### Confusion Matrix
+
+A confusion matrix will help identify which labels are most frequently confused. I expect the largest source of confusion to be between analysis and hot_take.
+
+I will report:
+
+* Overall accuracy
+* Per-class precision
+* Per-class recall
+* Per-class F1
+* Confusion matrix
+
+---
+
+## Definition of Success
+
+This classifier is intended to distinguish meaningful basketball discussion from unsupported opinions and emotional reactions.
+
+I will consider the project successful if:
+
+* Overall test accuracy is at least 75%.
+* The analysis label achieves an F1 score of at least 0.70.
+* The fine-tuned DistilBERT model outperforms the Groq zero-shot baseline on overall accuracy.
+* The confusion matrix shows that most mistakes occur between analysis and hot_take rather than random misclassifications.
+
+For a real deployment, I would consider the classifier useful if it consistently identifies analysis comments while avoiding excessive false positives.
+
+---
+
+## AI Tool Plan
+
+### Label Stress-Testing
+
+Before beginning annotation, I will use ChatGPT to generate comments that sit on the boundary between analysis and hot_take, as well as between hot_take and reaction.
+
+If I find comments that cannot be classified consistently using my current definitions, I will refine the label definitions and decision rules before collecting the full dataset.
+
+---
+
+### Annotation Assistance
+
+I may use ChatGPT to generate an initial label suggestion for some comments. However, every example will be manually reviewed before being added to the dataset.
+
+If AI-generated label suggestions are used, I will track which examples were pre-labeled and disclose this process in the README.
+
+The final label assignment will always be determined by manual review.
+
+---
+
+### Failure Analysis
+
+After evaluating the model, I will provide examples of incorrect predictions to ChatGPT and ask it to identify common patterns.
+
+Potential patterns include:
+
+* Confusion between analysis and hot_take.
+* Difficulty with short comments.
+* Difficulty with sarcasm.
+* Difficulty with comments containing both emotion and reasoning.
+
+Any patterns suggested by the AI will be verified manually by reviewing the original examples before including them in the final report.
